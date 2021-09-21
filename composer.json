@@ -3,7 +3,12 @@
     "description": "Yii2 graylog2 log target",
     "type": "yii2-extension",
     "license": "MIT",
-    "keywords": ["yii2", "graylog", "target", "gelf"],
+    "keywords": [
+        "yii2",
+        "graylog",
+        "target",
+        "gelf"
+    ],
     "authors": [
         {
             "name": "Dmitry V. Alekseev",
@@ -23,7 +28,8 @@
         "yiisoft/yii2": "^2.0"
     },
     "require-dev": {
-        "codeception/codeception": "^2.5",
+        "codeception/codeception": "^4.0.0",
+        "codeception/module-asserts": "^1.0.0",
         "yiisoft/yii2-coding-standards": "^2.0"
     },
     "repositories": [

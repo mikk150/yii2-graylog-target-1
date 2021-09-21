@@ -5,6 +5,7 @@ namespace alexeevdv\yii\graylog;
 use Exception;
 use Gelf\Message;
 use Psr\Log\LogLevel;
+use Yii;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
@@ -25,6 +26,10 @@ class MessageBuilder extends BaseObject implements MessageBuilderInterface
             ->setFile('unknown')
             ->setLine(0)
         ;
+
+        if (Yii::$app->hasProperty('uniqueRequestId')) {
+            $gelfMessage->setAdditional('unique_request_id', Yii::$app->uniqueRequestId);
+        }
 
         if (is_string($text)) {
             $gelfMessage = $gelfMessage->setShortMessage($text);
@@ -71,25 +76,31 @@ class MessageBuilder extends BaseObject implements MessageBuilderInterface
 
         if ($short !== null) {
             $message->setShortMessage($short);
-            $message->setFullMessage(VarDumper::dumpAsString($array));
         } else {
             $message->setShortMessage(VarDumper::dumpAsString($array));
         }
 
         if ($full !== null) {
-            $message->setFullMessage(VarDumper::dumpAsString($full));
+            $message->setFullMessage($full);
         }
 
         if (is_array($additional)) {
             foreach ($additional as $key => $val) {
                 if (is_string($key)) {
                     if (!is_string($val)) {
-                        $val = VarDumper::dumpAsString($val);
+                        $val = $val;
                     }
                     $message->setAdditional($key, $val);
                 }
             }
+        } else {
+            $array['additional'] = $additional;
         }
+
+        foreach ($array as $key => $value) {
+            $message->setAdditional($key, $value);
+        }
+
         return $message;
     }
 

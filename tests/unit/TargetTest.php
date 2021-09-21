@@ -9,10 +9,12 @@ use Gelf\MessageInterface;
 use Gelf\PublisherInterface;
 use yii\log\Logger;
 
-class TargetTest extends \Codeception\Test\Unit
+class TargetTest extends Unit
 {
     public function testExport()
     {
+        $this->mockApplication();
+
         $target = new Target([
             'publisher' => $this->makeEmpty(PublisherInterface::class, [
                 'publish' => Expected::once(),

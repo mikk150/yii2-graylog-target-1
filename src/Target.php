@@ -3,6 +3,7 @@
 namespace alexeevdv\yii\graylog;
 
 use Gelf\PublisherInterface;
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\di\Instance;
 
@@ -11,7 +12,7 @@ class Target extends \yii\log\Target
     /**
      * @var string
      */
-    public $facility = 'yii2';
+    public $facility;
 
     /**
      * @var PublisherInterface|array|string
@@ -25,6 +26,17 @@ class Target extends \yii\log\Target
 
     /**
      * @inheritdoc
+     */
+    public function init()
+    {
+        if ($this->facility === null) {
+            $this->facility = Yii::$app->id;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     *
      * @throws InvalidConfigException
      */
     public function export()
